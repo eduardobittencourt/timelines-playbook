@@ -1,51 +1,90 @@
-import { useState } from 'react'
-import { AppBar, Container, Toolbar, Typography, Button, TextField, Select, MenuItem, Grid, FormControl, FormLabel, Paper } from '@material-ui/core'
-import { useForm, Controller } from "react-hook-form"
+import { useEffect, useState } from 'react'
+import {
+  AppBar,
+  Container,
+  Toolbar,
+  Typography,
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  Grid,
+  FormControl,
+  FormLabel,
+  Paper
+} from '@material-ui/core'
+import { useForm, Controller } from 'react-hook-form'
 import { format, addBusinessDays } from 'date-fns'
-import { getColumns } from '../libs/sheets';
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider
-} from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
-import { makeStyles } from '@material-ui/core/styles';
+} from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns'
+import { makeStyles } from '@material-ui/core/styles'
+import axios from 'axios'
 
-export default function IndexPage({ data }) {
+export default function IndexPage() {
+  const [projects, setProjects] = useState([])
   const [name, setName] = useState(null)
   const [dates, setDates] = useState(null)
+  const [project, setProject] = useState(null)
   const { handleSubmit, control } = useForm()
 
   const onSubmit = handleSubmit(values => {
     const { date, project } = values
-    const { name, ...baseProject } = data[project]
 
-    const result = Object.entries(baseProject).reduce((acc, [key, value]) => {
+    const timmings = Object.entries(project).reduce((acc, [key, value]) => {
+      if (key === 'Deliverable') {
+        return acc
+      }
+      return { ...acc, [key]: value }
+    }, {})
+
+    const result = Object.entries(timmings).reduce((acc, [key, value]) => {
       const newDate = format(addBusinessDays(date, value), 'dd/MM/yyyy')
       return { ...acc, [key]: newDate }
     }, {})
 
     setName(values.name)
+    setProject(project.Deliverable)
     setDates(result)
   })
 
+  const submit = () => {
+    axios.post('/api/sheet', { name, dates, project })
+  }
+
+  useEffect(() => {
+    const call = async () => {
+      const { data } = await axios.get('/api/sheet')
+      setProjects(data)
+    }
+
+    call()
+  }, [])
+
   const classes = useStyles()
 
-  return <>
-    <AppBar position="sticky" className={classes.appBar}>
-      <Toolbar>
-        <Typography variant="h6">
-          Pravy
-        </Typography>
-      </Toolbar>
-    </AppBar>
-    <Container>
-      <form onSubmit={onSubmit}>
-        <Paper  className={classes.paper}>
-            <Grid container spacing={3} alignItems='flex-end'>
+  return (
+    <>
+      <AppBar position="sticky" className={classes.appBar}>
+        <Toolbar>
+          <Typography variant="h6">Standard Timelines - Playbook</Typography>
+        </Toolbar>
+      </AppBar>
+      <Container>
+        <form onSubmit={onSubmit}>
+          <Paper className={classes.paper}>
+            <Grid container spacing={3} alignItems="flex-end">
               <Grid item xs={4}>
                 <FormControl fullWidth>
                   <FormLabel>Name</FormLabel>
-                  <Controller as={TextField} name="name" control={control} fullWidth />
+                  <Controller
+                    as={TextField}
+                    name="name"
+                    control={control}
+                    fullWidth
+                  />
                 </FormControl>
               </Grid>
               <Grid item xs={4}>
@@ -61,7 +100,7 @@ export default function IndexPage({ data }) {
                         label="Kickoff"
                         format="dd/MM/yyyy"
                         KeyboardButtonProps={{
-                          "aria-label": "change date"
+                          'aria-label': 'change date'
                         }}
                         {...rest}
                       />
@@ -75,7 +114,12 @@ export default function IndexPage({ data }) {
                   <Controller
                     as={
                       <Select fullWidth>
-                        {Object.keys(data).map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
+                        {projects &&
+                          projects.map(project => (
+                            <MenuItem key={project.Deliverable} value={project}>
+                              {project.Deliverable}
+                            </MenuItem>
+                          ))}
                       </Select>
                     }
                     name="project"
@@ -84,28 +128,44 @@ export default function IndexPage({ data }) {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <Button variant='contained' color='primary' type="submit">Submit</Button>
+                <Button variant="contained" color="primary" type="submit">
+                  Submit
+                </Button>
               </Grid>
             </Grid>
-        </Paper>
-      </form>
-      <Paper className={classes.paper}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography variant='h3'>{name}</Typography>
-          </Grid>
-          {dates && Object.entries(dates).map(([key, value]) => {
-            return <Grid item xs={12} key={key}>
-              <Typography>{key}: {value}</Typography>
+          </Paper>
+        </form>
+        <Paper className={classes.paper}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Typography variant="h3">{name}</Typography>
             </Grid>
-          })}
-        </Grid>
-      </Paper>
-    </Container>
-  </>
+            {dates &&
+              Object.entries(dates).map(([key, value]) => {
+                return (
+                  <Grid item xs={12} key={key}>
+                    <Typography>
+                      {key}: {value}
+                    </Typography>
+                  </Grid>
+                )
+              })}
+          </Grid>
+          <Button
+            variant="contained"
+            color="primary"
+            type="button"
+            onClick={submit}
+          >
+            Save
+          </Button>
+        </Paper>
+      </Container>
+    </>
+  )
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   appBar: {
     marginBottom: 40
   },
@@ -113,30 +173,4 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 40,
     padding: 20
   }
-}));
-
-export async function getStaticProps() {
-  const rows = await getColumns();
-  const [headers, ...content] = rows
-
-  const result = content.reduce((acc, row) => {
-    const [key, ...values] = row
-    return { ...acc, [key]: values }
-  }, {})
-
-  const final = headers.reduce((acc, header, index) => {
-    if (header) {
-      return {
-        ...acc,
-        [header]: Object.entries(result).reduce((acc2, [key, value]) => ({ ...acc2, [key]: +value[index - 1] }), {})
-      }
-    }
-  }, {})
-
-  return {
-    props: {
-      data: final
-    },
-    revalidate: 1,
-  };
-}
+}))
