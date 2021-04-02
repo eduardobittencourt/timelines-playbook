@@ -8,15 +8,16 @@ import {
   Paper,
   Button,
   Grid,
-  Snackbar
+  Snackbar,
+  Link
 } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { makeStyles } from '@material-ui/core/styles'
 import { useForm, FormProvider } from 'react-hook-form'
 import { format, addBusinessDays } from 'date-fns'
 
 import { TextField, DatePicker, Select } from '../components/atoms'
 import { Timeline } from '../components/molecules'
-import { Alert } from '@material-ui/lab'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -107,7 +108,15 @@ const IndexPage = () => {
             </Typography>
             <Typography>
               Date and project settings and previously calculated results are
-              saved here.
+              saved{' '}
+              <Link
+                href="https://docs.google.com/spreadsheets/d/1nbGV2WtWFmDqvMWSFB3AglE8j0LFQGTvBPNI39RpJsk"
+                target="_blank"
+                rel="noreferrer"
+              >
+                here
+              </Link>
+              .
             </Typography>
           </Paper>
           <Paper className={classes.paper}>
