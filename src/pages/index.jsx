@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import {
   AppBar,
@@ -9,12 +9,14 @@ import {
   Button,
   Grid,
   Snackbar,
-  Link
+  Link,
+  Box
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { makeStyles } from '@material-ui/core/styles'
 import { useForm, FormProvider } from 'react-hook-form'
 import { format, addBusinessDays } from 'date-fns'
+import ReactToPrint from 'react-to-print'
 
 import { TextField, DatePicker, Select } from '../components/atoms'
 import { Timeline } from '../components/molecules'
@@ -27,7 +29,7 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3),
     padding: theme.spacing(3, 4)
   },
-  clearButton: {
+  secondButton: {
     marginLeft: theme.spacing(1)
   }
 }))
@@ -38,6 +40,7 @@ const IndexPage = () => {
   const [result, setResult] = useState(null)
   const [snackbar, setSnackbar] = useState(false)
   const [loadingPost, setLoadingPost] = useState(false)
+  const printable = useRef(null)
   const classes = useStyles()
 
   const methods = useForm({
@@ -157,7 +160,7 @@ const IndexPage = () => {
                       onClick={() =>
                         methods.reset({ name: null, type: null, date: null })
                       }
-                      className={classes.clearButton}
+                      className={classes.secondButton}
                     >
                       Clear values
                     </Button>
@@ -167,21 +170,36 @@ const IndexPage = () => {
             </FormProvider>
           </Paper>
           {result && (
-            <Paper className={classes.paper}>
+            <Paper className={classes.paper} ref={printable}>
               <Typography variant="h6" align="center">
                 {result.name}
               </Typography>
               <Typography align="center">{result.deliverable}</Typography>
               <Timeline dates={result.dates} />
-              <Button
-                type="button"
-                variant="contained"
-                color="primary"
-                onClick={saveResult}
-                disabled={loadingPost}
-              >
-                {loadingPost ? 'Submitting' : 'Save Result'}
-              </Button>
+              <Box displayPrint="none">
+                <Button
+                  type="button"
+                  variant="contained"
+                  color="primary"
+                  onClick={saveResult}
+                  disabled={loadingPost}
+                >
+                  {loadingPost ? 'Submitting' : 'Save Result'}
+                </Button>
+                <ReactToPrint
+                  trigger={() => (
+                    <Button
+                      type="button"
+                      color="primary"
+                      className={classes.secondButton}
+                    >
+                      Save PDF
+                    </Button>
+                  )}
+                  content={() => printable.current}
+                />
+              </Box>
+
               <Snackbar
                 anchorOrigin={{
                   vertical: 'bottom',
