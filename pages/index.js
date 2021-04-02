@@ -41,7 +41,7 @@ export default function IndexPage() {
     }, {})
 
     const result = Object.entries(timmings).reduce((acc, [key, value]) => {
-      const newDate = format(addBusinessDays(date, value), 'dd/MM/yyyy')
+      const newDate = format(addBusinessDays(date, value), 'MM/dd/yyyy')
       return { ...acc, [key]: newDate }
     }, {})
 
