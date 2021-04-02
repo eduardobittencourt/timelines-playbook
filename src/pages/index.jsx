@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme => ({
   paper: {
     margin: theme.spacing(3),
     padding: theme.spacing(3, 4)
+  },
+  clearButton: {
+    marginLeft: theme.spacing(1)
   }
 }))
 
@@ -147,6 +150,16 @@ const IndexPage = () => {
                   <Grid item xs={12}>
                     <Button variant="contained" color="primary" type="submit">
                       Generate result
+                    </Button>
+                    <Button
+                      color="primary"
+                      type="button"
+                      onClick={() =>
+                        methods.reset({ name: null, type: null, date: null })
+                      }
+                      className={classes.clearButton}
+                    >
+                      Clear values
                     </Button>
                   </Grid>
                 </Grid>
