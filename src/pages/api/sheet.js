@@ -30,11 +30,11 @@ export default async function (req, res) {
     case 'POST':
       const obj = {
         'Project Name': req.body.name,
-        Deliverable: req.body.project,
+        Deliverable: req.body.deliverable,
         ...req.body.dates
       }
 
       await database.addRow(obj)
-      res.send({ status: 200 })
+      res.send({ message: 'Project save successfully', severity: 'success' })
   }
 }
