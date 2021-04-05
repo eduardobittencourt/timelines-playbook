@@ -1,4 +1,5 @@
 import React from 'react'
+import { format } from 'date-fns'
 import { Typography } from '@material-ui/core'
 import {
   Timeline as MuiTimeline,
@@ -36,6 +37,7 @@ const Timeline = ({ dates }) => {
   return (
     <MuiTimeline align="alternate">
       {Object.entries(dates).map(([key, value], index) => {
+        const [month, day, year] = value.split('/')
         return (
           <TimelineItem key={key}>
             <TimelineSeparator>
@@ -45,10 +47,10 @@ const Timeline = ({ dates }) => {
               {index < Object.keys(dates).length - 1 && <TimelineConnector />}
             </TimelineSeparator>
             <TimelineContent>
+              <Typography>{key}</Typography>
               <Typography variant="h6" component="h1">
-                {key}
+                {format(new Date(year, month, day), 'PPP')}
               </Typography>
-              <Typography>{value}</Typography>
             </TimelineContent>
           </TimelineItem>
         )
