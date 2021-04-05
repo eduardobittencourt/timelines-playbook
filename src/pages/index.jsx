@@ -126,7 +126,7 @@ const IndexPage = () => {
             </Typography>
           </Paper>
           <Paper className={classes.paper}>
-            <Typography variant="h6">Data</Typography>
+            <Typography variant="h6">Project Informations</Typography>
             <FormProvider {...methods}>
               <form onSubmit={onSubmit}>
                 <Grid container spacing={3}>

@@ -9,6 +9,7 @@ import {
   TimelineContent,
   TimelineDot
 } from '@material-ui/lab'
+import { makeStyles } from '@material-ui/core/styles'
 import {
   AssistantPhoto,
   Assignment,
@@ -33,7 +34,15 @@ const StepIcon = ({ step }) => {
   }
 }
 
+const useStyles = makeStyles(theme => ({
+  timelineDot: {
+    boxShadow: 'none'
+  }
+}))
+
 const Timeline = ({ dates }) => {
+  const classes = useStyles()
+
   return (
     <MuiTimeline align="alternate">
       {Object.entries(dates).map(([key, value], index) => {
@@ -41,7 +50,7 @@ const Timeline = ({ dates }) => {
         return (
           <TimelineItem key={key}>
             <TimelineSeparator>
-              <TimelineDot color="primary">
+              <TimelineDot color="primary" className={classes.timelineDot}>
                 <StepIcon step={key} />
               </TimelineDot>
               {index < Object.keys(dates).length - 1 && <TimelineConnector />}
