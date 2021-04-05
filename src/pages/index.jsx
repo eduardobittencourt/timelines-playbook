@@ -117,7 +117,7 @@ const IndexPage = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-                here
+                <b>here</b>
               </Link>
               .
             </Typography>
