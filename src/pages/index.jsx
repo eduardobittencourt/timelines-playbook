@@ -106,15 +106,12 @@ const IndexPage = () => {
       <main>
         <Container className={classes.container}>
           <Paper className={classes.paper}>
-            <Typography variant="h6">About</Typography>
+            <Typography variant="h6">Welcome!</Typography>
             <Typography>
-              This application aims to assist in the calculation of the key
-              dates of a project delivery, and to store the results in a
-              specific spreadsheet.
-            </Typography>
-            <Typography>
-              Date and project settings and previously calculated results are
-              saved{' '}
+              Hey, welcome to our Timeline Calculator. Please fill in all the
+              fields to receive your full timeline. It was nice to remember that
+              those dates are calculated based on our Playbook Standard
+              Timeline. You can check the previous data{' '}
               <Link
                 href="https://docs.google.com/spreadsheets/d/1nbGV2WtWFmDqvMWSFB3AglE8j0LFQGTvBPNI39RpJsk"
                 target="_blank"
@@ -126,15 +123,15 @@ const IndexPage = () => {
             </Typography>
           </Paper>
           <Paper className={classes.paper}>
-            <Typography variant="h6">Project Informations</Typography>
+            <Typography variant="h6">Job Informations</Typography>
             <FormProvider {...methods}>
               <form onSubmit={onSubmit}>
                 <Grid container spacing={3}>
                   <Grid item md={4} xs={12}>
                     <TextField
                       name="name"
-                      placeholder="Project Name"
-                      label="Project Name"
+                      placeholder="Job Title"
+                      label="Job Title"
                       required
                     />
                   </Grid>
