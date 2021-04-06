@@ -58,7 +58,7 @@ const Timeline = ({ dates }) => {
             <TimelineContent>
               <Typography>{key}</Typography>
               <Typography variant="h6" component="h1">
-                {format(new Date(year, month, day), 'PPP')}
+                {format(new Date(year, month - 1, day), 'PPP')}
               </Typography>
             </TimelineContent>
           </TimelineItem>
