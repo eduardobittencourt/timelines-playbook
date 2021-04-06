@@ -121,7 +121,7 @@ const IndexPage = () => {
               .
             </Typography>
             <Typography>
-              It was nice to remember that those dates are calculated based on
+              It is nice to remember that those dates are calculated based on
               our Playbook's Standard Timeline.
             </Typography>
           </Paper>
