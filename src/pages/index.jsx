@@ -108,10 +108,9 @@ const IndexPage = () => {
           <Paper className={classes.paper}>
             <Typography variant="h6">Welcome!</Typography>
             <Typography>
-              Hey, welcome to our Timeline Calculator. Please fill in all the
-              fields to receive your full timeline. It was nice to remember that
-              those dates are calculated based on our Playbook Standard
-              Timeline. You can check the previous data{' '}
+              Hey, welcome to our Timeline Calculator, please fill in all the
+              fields to receive your full timeline. You can check the previous
+              data{' '}
               <Link
                 href="https://docs.google.com/spreadsheets/d/1nbGV2WtWFmDqvMWSFB3AglE8j0LFQGTvBPNI39RpJsk"
                 target="_blank"
@@ -120,6 +119,10 @@ const IndexPage = () => {
                 <b>here</b>
               </Link>
               .
+            </Typography>
+            <Typography>
+              It was nice to remember that those dates are calculated based on
+              our Playbook's Standard Timeline.
             </Typography>
           </Paper>
           <Paper className={classes.paper}>
