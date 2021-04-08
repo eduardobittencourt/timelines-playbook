@@ -14,7 +14,8 @@ import {
   AssistantPhoto,
   Assignment,
   Visibility,
-  HowToReg
+  HowToReg,
+  Telegram
 } from '@material-ui/icons'
 
 const StepIcon = ({ step }) => {
@@ -29,6 +30,8 @@ const StepIcon = ({ step }) => {
     case 'Client Feedback 1':
     case 'Client Feedback 2':
       return <HowToReg />
+    case 'Final Delivery':
+      return <Telegram />
     default:
       return <Assignment />
   }
